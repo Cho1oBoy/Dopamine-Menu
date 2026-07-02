@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #f9f1ec;
+    --bg-strong: #f3e4db;
+    --surface: #fffaf7;
+    --surface-strong: #f6e8df;
+    --line: rgba(118, 86, 74, 0.11);
+    --ink: #2f221e;
+    --ink-soft: #7a6056;
+    --paper: #fff8f4;
+    --paper-soft: rgba(255, 248, 244, 0.78);
+    --accent: #d8745a;
+    --accent-soft: #e8a08e;
+    --accent-strong: #c95e42;
+    --accent-ink: #fffaf7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-height: 100%;
+    background:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 28rem),
+      radial-gradient(circle at 85% 18%, rgba(232, 160, 142, 0.22), transparent 18rem),
+      radial-gradient(circle at bottom right, rgba(216, 116, 90, 0.12), transparent 24rem),
+      linear-gradient(180deg, var(--bg), var(--bg-strong));
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family:
+      "Aptos",
+      "Segoe UI Variable",
+      "Segoe UI",
+      "Trebuchet MS",
+      system-ui,
+      sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(216, 116, 90, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+}
