@@ -1,4 +1,5 @@
 import BlurText from "./blur-text";
+import SplitText from "./split-text";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 
@@ -21,12 +22,24 @@ export function HomeScreen({
 }: HomeScreenProps) {
   return (
     <div className="space-y-6 sm:space-y-7">
-      <div className="space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ink-soft)]">
-          Без осуждения, без геройства
-        </p>
-        <div className="space-y-3">
-          <h1 className="max-w-lg text-[2.6rem] font-semibold leading-[0.94] tracking-[-0.06em] text-[var(--ink)] sm:text-[4.2rem]">
+      <div className="space-y-4 sm:space-y-5">
+        <div className="inline-flex w-fit rounded-full border border-[rgba(120,83,66,0.10)] bg-white/72 px-4 py-2 shadow-[0_10px_24px_rgba(88,62,53,0.05)]">
+          <SplitText
+            className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--ink-soft)] sm:text-[0.98rem]"
+            delay={45}
+            duration={0.7}
+            from={{ opacity: 0, y: 18 }}
+            rootMargin="-40px"
+            splitType="words"
+            tag="p"
+            text="Без геройства, без осуждения"
+            textAlign="left"
+            to={{ opacity: 1, y: 0 }}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h1 className="max-w-xl text-[2.8rem] font-bold leading-[0.92] tracking-[-0.065em] text-[var(--ink)] sm:text-[4.5rem]">
             <BlurText
               animateBy="words"
               as="span"
@@ -36,9 +49,10 @@ export function HomeScreen({
               text="Dopamine Menu"
             />
           </h1>
-          <p className="max-w-lg text-lg leading-8 text-[var(--ink)]/86 sm:text-xl">
-            Когда тянет в быстрый дофамин, это приложение помогает не сорваться в автопилот, а выбрать
-            короткое действие, которое возвращает тебя в себя.
+          <p className="max-w-xl text-[1.05rem] leading-8 text-[var(--ink)]/84 sm:text-[1.3rem] sm:leading-9">
+            Когда тянет в быстрый дофамин, это приложение помогает не сорваться в
+            автопилот, а выбрать короткое действие, которое возвращает тебя в
+            себя.
           </p>
         </div>
       </div>
@@ -57,8 +71,8 @@ export function HomeScreen({
                   как откроется следующая вкладка
                 </h2>
                 <p className="max-w-md text-sm leading-7 text-[var(--ink-soft)] sm:text-base">
-                  За 2-5 минут ты можешь сбить импульс, вернуть себе фокус и не уходить в бесконечный
-                  скролл, сладкое или импульсивные покупки.
+                  За 2-5 минут ты можешь сбить импульс, вернуть себе фокус и не
+                  уходить в бесконечный скролл, сладкое или импульсивные покупки.
                 </p>
               </div>
             </div>
@@ -110,14 +124,16 @@ export function HomeScreen({
                 Ты уже умеешь прерывать импульс
               </p>
               <p className="text-sm leading-6 text-[var(--ink-soft)]">
-                Каждая спасённая сессия — это момент, когда ты выбрал себя, а не автопилот.
+                Каждая спасённая сессия — это момент, когда ты выбрал себя, а не
+                автопилот.
               </p>
             </div>
           </Card>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-md text-sm leading-6 text-[var(--ink-soft)]">
-              Это не тест на силу воли. Это быстрый, добрый маршрут обратно к себе.
+              Это не тест на силу воли. Это быстрый, добрый маршрут обратно к
+              себе.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button className="sm:w-auto sm:px-5 sm:py-3" onClick={onOpenStats} variant="ghost">
