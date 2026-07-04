@@ -85,20 +85,14 @@ function ProblemIllustration({
   if (id === "doomscroll") {
     return (
       <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-        <rect x="22" y="10" width="52" height="76" rx="16" fill="#f3ded5" />
-        <rect x="30" y="22" width="36" height="6" rx="3" fill="#2f221e" opacity="0.18" />
-        <rect x="30" y="34" width="28" height="6" rx="3" fill="#d8745a" opacity="0.75" />
-        <rect x="30" y="46" width="36" height="6" rx="3" fill="#2f221e" opacity="0.12" />
-        <rect x="30" y="58" width="24" height="6" rx="3" fill="#2f221e" opacity="0.12" />
-        <path d="M62 71c5 0 9-4 9-9" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
-        <path
-          d="M66 66l5-4 3 6"
-          fill="none"
-          stroke="#d8745a"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="4"
-        />
+        <rect x="23" y="11" width="50" height="74" rx="16" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2.5" />
+        <rect x="34" y="18" width="28" height="5" rx="2.5" fill="#2f221e" opacity="0.14" />
+        <rect x="30" y="30" width="36" height="8" rx="4" fill="#f4ddd3" />
+        <rect x="30" y="43" width="36" height="8" rx="4" fill="#f7e8e1" />
+        <rect x="30" y="56" width="36" height="8" rx="4" fill="#f4ddd3" />
+        <rect x="30" y="69" width="24" height="8" rx="4" fill="#f7e8e1" />
+        <path d="M76 63c0 6-4 10-10 10" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
+        <path d="M70 68l-4 5 8 1" fill="none" stroke="#d8745a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" />
       </svg>
     );
   }
@@ -106,12 +100,13 @@ function ProblemIllustration({
   if (id === "reels") {
     return (
       <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-        <rect x="12" y="16" width="72" height="64" rx="18" fill="#f7e7df" />
-        <rect x="20" y="24" width="56" height="12" rx="6" fill="#f2d3c5" />
-        <circle cx="31" cy="54" r="12" fill="#d8745a" opacity="0.9" />
-        <path d="M28 48l11 6-11 6V48z" fill="#fff8f4" />
-        <rect x="48" y="46" width="22" height="6" rx="3" fill="#2f221e" opacity="0.18" />
-        <rect x="48" y="57" width="16" height="6" rx="3" fill="#2f221e" opacity="0.12" />
+        <rect x="12" y="18" width="72" height="60" rx="18" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2.5" />
+        <rect x="20" y="26" width="56" height="10" rx="5" fill="#f4ddd3" />
+        <rect x="22" y="42" width="24" height="28" rx="10" fill="#d8745a" opacity="0.92" />
+        <path d="M31 50l9 6-9 6V50z" fill="#fff8f4" />
+        <rect x="52" y="46" width="18" height="6" rx="3" fill="#2f221e" opacity="0.16" />
+        <rect x="52" y="57" width="14" height="6" rx="3" fill="#2f221e" opacity="0.12" />
+        <circle cx="74" cy="58" r="6" fill="#f4ddd3" />
       </svg>
     );
   }
@@ -119,8 +114,8 @@ function ProblemIllustration({
   if (id === "study") {
     return (
       <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-        <rect x="18" y="14" width="60" height="68" rx="14" fill="#f5e5dc" />
-        <rect x="28" y="26" width="18" height="18" rx="5" fill="#d8745a" opacity="0.82" />
+        <rect x="18" y="14" width="60" height="68" rx="14" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2.5" />
+        <rect x="28" y="26" width="18" height="18" rx="5" fill="#d8745a" opacity="0.9" />
         <path
           d="M31 35l4 4 8-10"
           fill="none"
@@ -131,8 +126,8 @@ function ProblemIllustration({
         />
         <rect x="52" y="28" width="16" height="5" rx="2.5" fill="#2f221e" opacity="0.15" />
         <rect x="52" y="38" width="12" height="5" rx="2.5" fill="#2f221e" opacity="0.1" />
-        <rect x="28" y="54" width="40" height="5" rx="2.5" fill="#2f221e" opacity="0.12" />
-        <rect x="28" y="64" width="32" height="5" rx="2.5" fill="#2f221e" opacity="0.1" />
+        <rect x="28" y="54" width="40" height="5" rx="2.5" fill="#f4ddd3" />
+        <rect x="28" y="64" width="32" height="5" rx="2.5" fill="#f7e8e1" />
       </svg>
     );
   }
@@ -140,54 +135,61 @@ function ProblemIllustration({
   if (id === "morning-phone") {
     return (
       <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-        <circle cx="48" cy="48" r="30" fill="#f6e6dd" />
-        <circle cx="48" cy="48" r="18" fill="#fff8f4" stroke="#d8745a" strokeWidth="4" />
+        <circle cx="38" cy="48" r="20" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2.5" />
         <path
-          d="M48 36v14l9 5"
+          d="M38 36v12l8 5"
           fill="none"
           stroke="#2f221e"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="4"
         />
-        <path d="M64 26l5-5" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
-        <path d="M27 69l5-5" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
+        <rect x="54" y="22" width="22" height="42" rx="8" fill="#f4ddd3" />
+        <rect x="59" y="28" width="12" height="3.5" rx="1.75" fill="#2f221e" opacity="0.18" />
+        <rect x="58" y="36" width="14" height="16" rx="5" fill="#fff8f4" opacity="0.9" />
+        <path d="M67 70c5 0 8-3 8-8" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
+        <path d="M72 66l3-4 2 5" fill="none" stroke="#d8745a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" />
       </svg>
     );
   }
 
   return (
     <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-      <rect x="18" y="24" width="34" height="42" rx="12" fill="#f4ddd3" />
+      <rect x="16" y="24" width="32" height="40" rx="11" fill="#f4ddd3" />
       <path
-        d="M26 37c0-6 4-10 9-10s9 4 9 10"
+        d="M23 37c0-6 4-10 9-10s9 4 9 10"
         fill="none"
         stroke="#d8745a"
         strokeLinecap="round"
         strokeWidth="4"
       />
-      <path d="M29 47h12" fill="none" stroke="#2f221e" opacity="0.18" strokeLinecap="round" strokeWidth="4" />
-      <path d="M29 56h8" fill="none" stroke="#2f221e" opacity="0.14" strokeLinecap="round" strokeWidth="4" />
-      <rect x="52" y="18" width="22" height="36" rx="8" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2" />
-      <path d="M58 28h10" fill="none" stroke="#2f221e" opacity="0.15" strokeLinecap="round" strokeWidth="3" />
-      <path d="M58 35h8" fill="none" stroke="#2f221e" opacity="0.12" strokeLinecap="round" strokeWidth="3" />
+      <path d="M26 47h12" fill="none" stroke="#2f221e" opacity="0.18" strokeLinecap="round" strokeWidth="4" />
+      <path d="M26 56h8" fill="none" stroke="#2f221e" opacity="0.14" strokeLinecap="round" strokeWidth="4" />
+      <rect x="52" y="20" width="22" height="32" rx="7" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2" />
+      <path d="M57 29h12" fill="none" stroke="#2f221e" opacity="0.16" strokeLinecap="round" strokeWidth="3" />
+      <path d="M57 36h9" fill="none" stroke="#2f221e" opacity="0.12" strokeLinecap="round" strokeWidth="3" />
       <path
-        d="M62 58c6 0 11 5 11 11"
+        d="M54 67h18c0-6-4-10-9-10s-9 4-9 10Z"
+        fill="#d8745a"
+        opacity="0.92"
+      />
+      <path d="M58 63h10" fill="none" stroke="#fff8f4" strokeLinecap="round" strokeWidth="3.5" />
+      <path d="M61 58h4" fill="none" stroke="#fff8f4" strokeLinecap="round" strokeWidth="3.5" />
+      <path
+        d="M74 62c4 0 7 3 7 7"
         fill="none"
         stroke="#d8745a"
         strokeLinecap="round"
         strokeWidth="4"
       />
       <path
-        d="M70 64l3 5-6 2"
+        d="M78 66l3 3-5 2"
         fill="none"
         stroke="#d8745a"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="4"
       />
-      <circle cx="30" cy="72" r="8" fill="#d8745a" opacity="0.16" />
-      <path d="M27 72h6" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="3.5" />
     </svg>
   );
 }
