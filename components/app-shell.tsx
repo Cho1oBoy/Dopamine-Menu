@@ -1,9 +1,9 @@
 "use client";
 
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 
 import { MOOD_STATES } from "../lib/content";
-import { pickSuggestion } from "../lib/suggestions";
+import { getSuggestionById, pickSuggestion } from "../lib/suggestions";
 import {
   createDefaultAppData,
   markSessionHelped,
@@ -11,7 +11,13 @@ import {
   recordJournalEntry,
   recordRestart
 } from "../lib/stats";
-import { loadAppData, saveAppData } from "../lib/storage";
+import {
+  loadAppData,
+  loadUiState,
+  saveAppData,
+  saveUiState,
+  type PersistedUiState
+} from "../lib/storage";
 import type { AppData, MoodRating, MoodState, SessionRecord, Suggestion } from "../lib/types";
 import { HomeScreen } from "./home-screen";
 import { JournalEntryScreen } from "./journal-entry-screen";
@@ -33,6 +39,7 @@ type Step =
   | "relapse"
   | "journal"
   | "journal-entry";
+
 type TimerMode = "suggestion" | "relapse";
 
 function saveWithWarning(nextData: AppData, setWarning: (value: string | null) => void) {
@@ -40,7 +47,8 @@ function saveWithWarning(nextData: AppData, setWarning: (value: string | null) =
   setWarning(result.warning);
 }
 
-const RELAPSE_TIMER_TEXT = "Просто вернись в тело: убери экран подальше и побудь с собой две минуты.";
+const RELAPSE_TIMER_TEXT =
+  "Просто вернись в тело: убери экран подальше и побудь с собой две минуты.";
 
 export function AppShell() {
   const [step, setStep] = useState<Step>("home");
@@ -52,38 +60,123 @@ export function AppShell() {
   const [journalSessionId, setJournalSessionId] = useState<string | null>(null);
   const [remainingSec, setRemainingSec] = useState(0);
   const [timerMode, setTimerMode] = useState<TimerMode>("suggestion");
+  const [timerEndsAt, setTimerEndsAt] = useState<string | null>(null);
+  const hasHydrated = useRef(false);
+
+  function getRemainingFromSnapshot(nextTimerEndsAt: string | null, nextRemainingSec: number | null) {
+    if (nextTimerEndsAt) {
+      return Math.max(0, Math.ceil((new Date(nextTimerEndsAt).getTime() - Date.now()) / 1000));
+    }
+
+    return Math.max(0, nextRemainingSec ?? 0);
+  }
+
+  function buildUiState(overrides: Partial<PersistedUiState> = {}): PersistedUiState {
+    return {
+      step: overrides.step ?? step,
+      selectedStateId:
+        "selectedStateId" in overrides ? overrides.selectedStateId ?? null : selectedState?.id ?? null,
+      selectedSuggestionId:
+        "selectedSuggestionId" in overrides
+          ? overrides.selectedSuggestionId ?? null
+          : selectedSuggestion?.id ?? null,
+      recentSessionId:
+        "recentSessionId" in overrides ? overrides.recentSessionId ?? null : recentSessionId,
+      journalSessionId:
+        "journalSessionId" in overrides ? overrides.journalSessionId ?? null : journalSessionId,
+      timerMode: overrides.timerMode ?? timerMode,
+      remainingSec: "remainingSec" in overrides ? overrides.remainingSec ?? null : remainingSec,
+      timerEndsAt: "timerEndsAt" in overrides ? overrides.timerEndsAt ?? null : timerEndsAt
+    };
+  }
+
+  function applyUiState(nextUi: PersistedUiState) {
+    setStep(nextUi.step as Step);
+    setSelectedState(
+      nextUi.selectedStateId ? MOOD_STATES.find((item) => item.id === nextUi.selectedStateId) ?? null : null
+    );
+    setSelectedSuggestion(
+      nextUi.selectedSuggestionId ? getSuggestionById(nextUi.selectedSuggestionId) : null
+    );
+    setRecentSessionId(nextUi.recentSessionId);
+    setJournalSessionId(nextUi.journalSessionId);
+    setTimerMode(nextUi.timerMode);
+    setTimerEndsAt(nextUi.timerEndsAt);
+    setRemainingSec(getRemainingFromSnapshot(nextUi.timerEndsAt, nextUi.remainingSec));
+  }
+
+  function syncUiState(nextUi: PersistedUiState, historyMode: "push" | "replace" = "replace") {
+    saveUiState(nextUi);
+
+    const method = historyMode === "push" ? "pushState" : "replaceState";
+    window.history[method]({ dopamineMenuUi: nextUi }, "");
+  }
+
+  function moveTo(nextStep: Step, overrides: Partial<PersistedUiState> = {}) {
+    const nextUi = buildUiState({ ...overrides, step: nextStep });
+
+    startTransition(() => {
+      applyUiState(nextUi);
+    });
+
+    if (hasHydrated.current) {
+      syncUiState(nextUi, "push");
+    }
+  }
 
   useEffect(() => {
     const result = loadAppData();
+    const savedUiState = loadUiState();
 
     setData(result.data);
     setWarning(result.warning);
+
+    if (savedUiState) {
+      applyUiState(savedUiState);
+      window.history.replaceState({ dopamineMenuUi: savedUiState }, "");
+    } else {
+      window.history.replaceState({ dopamineMenuUi: buildUiState() }, "");
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      const nextUi = event.state?.dopamineMenuUi as Partial<PersistedUiState> | undefined;
+
+      if (!nextUi?.step || typeof nextUi.step !== "string") {
+        return;
+      }
+
+      applyUiState(buildUiState(nextUi));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    hasHydrated.current = true;
+
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   useEffect(() => {
-    if (step !== "timer" || remainingSec <= 0) {
+    if (step !== "timer" || !timerEndsAt) {
       return;
     }
 
-    const timerId = window.setInterval(() => {
-      setRemainingSec((current) => {
-        if (current <= 1) {
-          window.clearInterval(timerId);
-          return 0;
-        }
+    const updateRemaining = () => {
+      setRemainingSec(getRemainingFromSnapshot(timerEndsAt, null));
+    };
 
-        return current - 1;
-      });
-    }, 1000);
+    updateRemaining();
+
+    const timerId = window.setInterval(updateRemaining, 1000);
 
     return () => window.clearInterval(timerId);
-  }, [remainingSec, step]);
+  }, [step, timerEndsAt]);
 
-  function moveTo(nextStep: Step) {
-    startTransition(() => {
-      setStep(nextStep);
-    });
-  }
+  useEffect(() => {
+    if (!hasHydrated.current) {
+      return;
+    }
+
+    syncUiState(buildUiState(), "replace");
+  }, [journalSessionId, recentSessionId, selectedState, selectedSuggestion, step, timerEndsAt, timerMode]);
 
   function openRelapseMode() {
     moveTo("relapse");
@@ -99,8 +192,7 @@ export function AppShell() {
       return;
     }
 
-    setJournalSessionId(recentSessionId);
-    moveTo("journal-entry");
+    moveTo("journal-entry", { journalSessionId: recentSessionId });
   }
 
   function handleSelectState(state: MoodState) {
@@ -111,9 +203,13 @@ export function AppShell() {
       return;
     }
 
-    setSelectedState(state);
-    setSelectedSuggestion(suggestion);
-    moveTo("suggestion");
+    moveTo("suggestion", {
+      selectedStateId: state.id,
+      selectedSuggestionId: suggestion.id,
+      remainingSec: null,
+      timerEndsAt: null,
+      timerMode: "suggestion"
+    });
   }
 
   function handleAnotherSuggestion() {
@@ -135,14 +231,25 @@ export function AppShell() {
       return;
     }
 
+    const nextRemainingSec = selectedSuggestion.durationMinutes * 60;
+    const endsAt = new Date(Date.now() + nextRemainingSec * 1000).toISOString();
+
     setTimerMode("suggestion");
-    setRemainingSec(selectedSuggestion.durationMinutes * 60);
-    moveTo("timer");
+    setTimerEndsAt(endsAt);
+    setRemainingSec(nextRemainingSec);
+    moveTo("timer", {
+      timerMode: "suggestion",
+      remainingSec: nextRemainingSec,
+      timerEndsAt: endsAt
+    });
   }
 
   function handleCompleteTimer() {
+    setTimerEndsAt(null);
+    setRemainingSec(0);
+
     if (timerMode === "relapse") {
-      moveTo("home");
+      moveTo("home", { remainingSec: 0, timerEndsAt: null });
       return;
     }
 
@@ -159,10 +266,16 @@ export function AppShell() {
       nowIso: new Date().toISOString()
     });
 
+    const nextRecentSessionId = nextData.history[0]?.id ?? null;
+
     setData(nextData);
-    setRecentSessionId(nextData.history[0]?.id ?? null);
+    setRecentSessionId(nextRecentSessionId);
     saveWithWarning(nextData, setWarning);
-    moveTo("result");
+    moveTo("result", {
+      recentSessionId: nextRecentSessionId,
+      remainingSec: 0,
+      timerEndsAt: null
+    });
   }
 
   function finishResult(helped: boolean) {
@@ -197,10 +310,18 @@ export function AppShell() {
   }
 
   function handleRelapseReturn() {
+    const nextRemainingSec = 120;
+    const endsAt = new Date(Date.now() + nextRemainingSec * 1000).toISOString();
+
     handleRelapseRestart();
     setTimerMode("relapse");
-    setRemainingSec(120);
-    moveTo("timer");
+    setTimerEndsAt(endsAt);
+    setRemainingSec(nextRemainingSec);
+    moveTo("timer", {
+      timerMode: "relapse",
+      remainingSec: nextRemainingSec,
+      timerEndsAt: endsAt
+    });
   }
 
   function handleRelapseJournalSave(entry: {
@@ -278,7 +399,14 @@ export function AppShell() {
       return (
         <TimerScreen
           durationSec={timerMode === "relapse" ? 120 : (selectedSuggestion?.durationMinutes ?? 2) * 60}
-          onCancel={() => moveTo(timerMode === "relapse" ? "relapse" : "suggestion")}
+          onCancel={() => {
+            setTimerEndsAt(null);
+            setRemainingSec(0);
+            moveTo(timerMode === "relapse" ? "relapse" : "suggestion", {
+              remainingSec: 0,
+              timerEndsAt: null
+            });
+          }}
           onComplete={handleCompleteTimer}
           remainingSec={remainingSec}
           title={timerMode === "relapse" ? RELAPSE_TIMER_TEXT : selectedSuggestion?.title ?? ""}
