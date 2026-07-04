@@ -75,6 +75,39 @@ const navItems = [
   { href: "#who", label: "Для кого" }
 ];
 
+const problemCardMeta = {
+  doomscroll: {
+    badge: "Скролл",
+    shellClassName:
+      "bg-[linear-gradient(180deg,rgba(255,245,240,0.98),rgba(255,251,247,0.92))]",
+    badgeClassName: "bg-[rgba(216,116,90,0.12)] text-[var(--ink)]"
+  },
+  reels: {
+    badge: "Short-video",
+    shellClassName:
+      "bg-[linear-gradient(180deg,rgba(255,243,237,0.98),rgba(255,249,245,0.92))]",
+    badgeClassName: "bg-[rgba(216,116,90,0.16)] text-[var(--ink)]"
+  },
+  study: {
+    badge: "Фокус",
+    shellClassName:
+      "bg-[linear-gradient(180deg,rgba(255,247,242,0.98),rgba(255,251,248,0.92))]",
+    badgeClassName: "bg-[rgba(216,116,90,0.12)] text-[var(--ink)]"
+  },
+  "morning-phone": {
+    badge: "Утро",
+    shellClassName:
+      "bg-[linear-gradient(180deg,rgba(255,244,238,0.98),rgba(255,250,246,0.92))]",
+    badgeClassName: "bg-[rgba(216,116,90,0.14)] text-[var(--ink)]"
+  },
+  impulse: {
+    badge: "Импульс",
+    shellClassName:
+      "bg-[linear-gradient(180deg,rgba(255,242,235,0.98),rgba(255,248,243,0.92))]",
+    badgeClassName: "bg-[rgba(216,116,90,0.18)] text-[var(--ink)]"
+  }
+} as const;
+
 function ProblemIllustration({
   id,
   label
@@ -366,19 +399,48 @@ export function LandingPage() {
             <h2 className="text-[2rem] font-semibold leading-[1] tracking-[-0.05em] text-[var(--ink)] sm:text-[3rem]">
               Открыл телефон на 2 минуты — пропал на час?
             </h2>
+            <p className="max-w-xl text-sm leading-7 text-[var(--ink-soft)] sm:text-[1rem]">
+              Эти моменты выглядят по-разному, но ощущаются похоже: внимание уходит раньше,
+              чем ты вообще успеваешь это заметить.
+            </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            {problemPoints.map((item) => (
-              <Card key={item.id} className="min-h-[14rem] border-[rgba(120,83,66,0.08)] bg-white/84 p-5">
-                <div className="flex h-full flex-col gap-5">
-                  <div className="rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(255,245,240,0.95),rgba(255,250,247,0.88))] p-3">
-                    <ProblemIllustration id={item.id} label={item.illustrationLabel} />
+            {problemPoints.map((item) => {
+              const meta = problemCardMeta[item.id];
+
+              return (
+                <Card
+                  key={item.id}
+                  className="group min-h-[15.5rem] border-[rgba(120,83,66,0.08)] bg-white/88 p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(88,62,53,0.08)] sm:p-5"
+                >
+                  <div className="flex h-full flex-col gap-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <span
+                        className={`inline-flex rounded-full px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] ${meta.badgeClassName}`}
+                      >
+                        {meta.badge}
+                      </span>
+                      <span className="text-[0.74rem] font-medium uppercase tracking-[0.16em] text-[var(--ink-soft)]">
+                        0{problemPoints.findIndex((problemPoint) => problemPoint.id === item.id) + 1}
+                      </span>
+                    </div>
+
+                    <div
+                      className={`rounded-[1.55rem] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] ring-1 ring-[rgba(120,83,66,0.06)] transition duration-300 group-hover:scale-[1.02] ${meta.shellClassName}`}
+                    >
+                      <div className="flex min-h-[7.6rem] items-center justify-center">
+                        <ProblemIllustration id={item.id} label={item.illustrationLabel} />
+                      </div>
+                    </div>
+
+                    <p className="max-w-[16rem] text-[1.03rem] font-medium leading-7 tracking-[-0.02em] text-[var(--ink)]">
+                      {item.label}
+                    </p>
                   </div>
-                  <p className="text-base leading-7 text-[var(--ink)]">{item.label}</p>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
         </section>
 
