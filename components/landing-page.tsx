@@ -158,13 +158,36 @@ function ProblemIllustration({
 
   return (
     <svg aria-label={label} className="h-24 w-24" role="img" viewBox="0 0 96 96">
-      <rect x="18" y="28" width="28" height="30" rx="10" fill="#f4ddd3" />
-      <rect x="50" y="22" width="28" height="36" rx="10" fill="#f7e8e1" />
-      <path d="M29 44h8" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
-      <path d="M58 41h12" fill="none" stroke="#2f221e" opacity="0.16" strokeLinecap="round" strokeWidth="4" />
-      <path d="M57 67c2-7 7-11 15-12" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="4" />
-      <circle cx="33" cy="68" r="10" fill="#d8745a" opacity="0.82" />
-      <path d="M29 68h8" fill="none" stroke="#fff8f4" strokeLinecap="round" strokeWidth="4" />
+      <rect x="18" y="24" width="34" height="42" rx="12" fill="#f4ddd3" />
+      <path
+        d="M26 37c0-6 4-10 9-10s9 4 9 10"
+        fill="none"
+        stroke="#d8745a"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+      <path d="M29 47h12" fill="none" stroke="#2f221e" opacity="0.18" strokeLinecap="round" strokeWidth="4" />
+      <path d="M29 56h8" fill="none" stroke="#2f221e" opacity="0.14" strokeLinecap="round" strokeWidth="4" />
+      <rect x="52" y="18" width="22" height="36" rx="8" fill="#fff8f4" stroke="#e7cec2" strokeWidth="2" />
+      <path d="M58 28h10" fill="none" stroke="#2f221e" opacity="0.15" strokeLinecap="round" strokeWidth="3" />
+      <path d="M58 35h8" fill="none" stroke="#2f221e" opacity="0.12" strokeLinecap="round" strokeWidth="3" />
+      <path
+        d="M62 58c6 0 11 5 11 11"
+        fill="none"
+        stroke="#d8745a"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+      <path
+        d="M70 64l3 5-6 2"
+        fill="none"
+        stroke="#d8745a"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="4"
+      />
+      <circle cx="30" cy="72" r="8" fill="#d8745a" opacity="0.16" />
+      <path d="M27 72h6" fill="none" stroke="#d8745a" strokeLinecap="round" strokeWidth="3.5" />
     </svg>
   );
 }
@@ -208,18 +231,27 @@ export function LandingPage() {
                   />
                 </p>
               </div>
-              <Link className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)] sm:hidden" href="/app">
+              <Link
+                className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)] sm:hidden"
+                href="/app"
+              >
                 Открыть
               </Link>
             </div>
 
             <nav className="hidden items-center gap-2 sm:flex">
               {navItems.map((item) => (
-                <Link key={item.href} className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ink-soft)] transition hover:bg-white/78 hover:text-[var(--ink)]" href={item.href}>
+                <Link
+                  key={item.href}
+                  className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ink-soft)] transition hover:bg-white/78 hover:text-[var(--ink)]"
+                  href={item.href}
+                >
                   {item.label}
                 </Link>
               ))}
-              <Link className={linkButtonClassName("primary")} href="/app">Попробовать</Link>
+              <Link className={linkButtonClassName("primary")} href="/app">
+                Попробовать
+              </Link>
             </nav>
           </div>
         </header>
@@ -233,7 +265,16 @@ export function LandingPage() {
 
               <div className="space-y-4">
                 <h1 className="max-w-3xl text-[2.5rem] font-bold leading-[0.92] tracking-[-0.07em] text-[var(--ink)] sm:text-[4.4rem]">
-                  <BlurText animateBy="words" as="span" className="block" delay={150} direction="top" rootMargin="-40px" stepDuration={0.38} text="Когда тянет залипнуть — выбери здоровый дофамин" />
+                  <BlurText
+                    animateBy="words"
+                    as="span"
+                    className="block"
+                    delay={150}
+                    direction="top"
+                    rootMargin="-40px"
+                    stepDuration={0.38}
+                    text="Когда тянет залипнуть — выбери здоровый дофамин"
+                  />
                 </h1>
                 <p className="max-w-2xl text-[1.02rem] leading-8 text-[var(--ink)]/84 sm:text-[1.25rem] sm:leading-9">
                   Dopamine Menu помогает сделать паузу перед скроллом, сладким, фастфудом,
@@ -242,8 +283,12 @@ export function LandingPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link className={linkButtonClassName("primary")} href="/app">Попробовать бесплатно</Link>
-                <Link className={linkButtonClassName("secondary")} href="#how-it-works">Как это работает</Link>
+                <Link className={linkButtonClassName("primary")} href="/app">
+                  Попробовать бесплатно
+                </Link>
+                <Link className={linkButtonClassName("secondary")} href="#how-it-works">
+                  Как это работает
+                </Link>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
@@ -267,13 +312,17 @@ export function LandingPage() {
             <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-[var(--ink-soft)]">Как выглядит маленький план спасения</p>
-                <div className="rounded-full bg-white/90 px-3 py-2 text-xs font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.08)]">2 минуты</div>
+                <div className="rounded-full bg-white/90 px-3 py-2 text-xs font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.08)]">
+                  2 минуты
+                </div>
               </div>
 
               <div className="rounded-[1.75rem] border border-[rgba(120,83,66,0.08)] bg-[linear-gradient(180deg,rgba(255,252,250,0.96),rgba(255,245,238,0.92))] p-5 shadow-[0_22px_52px_rgba(88,62,53,0.08)]">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[var(--ink-soft)]">Когда хочется сорваться</p>
+                    <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[var(--ink-soft)]">
+                      Когда хочется сорваться
+                    </p>
                     <h2 className="mt-3 text-[1.8rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[var(--ink)]">
                       Открой паузу до того,
                       <br />
@@ -336,7 +385,15 @@ export function LandingPage() {
             <div className="space-y-4">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--ink-soft)]">Решение</p>
               <div className="max-w-3xl text-[2rem] font-semibold leading-[1] tracking-[-0.05em] text-[var(--ink)] sm:text-[3rem]">
-                <ShinyText className="block" color="#2f221e" delay={0.35} shineColor="#fffaf7" speed={6} spread={132} text="Приложение не запрещает. Оно помогает переключиться." />
+                <ShinyText
+                  className="block"
+                  color="#2f221e"
+                  delay={0.35}
+                  shineColor="#fffaf7"
+                  speed={6}
+                  spread={132}
+                  text="Приложение не запрещает. Оно помогает переключиться."
+                />
               </div>
               <p className="text-base leading-8 text-[var(--ink-soft)]">
                 Вместо большого «начинаю новую жизнь» ты получаешь маленький понятный шаг здесь и сейчас.
@@ -352,7 +409,10 @@ export function LandingPage() {
               "Сохрани прогресс",
               "Если сорвался — мягко начни заново"
             ].map((step, index) => (
-              <Card key={step} className="border-[rgba(120,83,66,0.08)] bg-white/88 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+              <Card
+                key={step}
+                className="border-[rgba(120,83,66,0.08)] bg-white/88 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6"
+              >
                 <div className="flex items-start gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[rgba(216,116,90,0.12)] text-sm font-semibold text-[var(--ink)]">
                     0{index + 1}
@@ -360,11 +420,16 @@ export function LandingPage() {
                   <div>
                     <p className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">{step}</p>
                     <p className="mt-2 text-sm leading-6 text-[var(--ink-soft)]">
-                      {index === 0 && "Не нужно долго думать о себе. Просто честно отмечаешь, что с тобой сейчас."}
-                      {index === 1 && "Короткое действие проще начать, чем большой план по самоконтролю."}
-                      {index === 2 && "Таймер держит рамку, чтобы пауза не превратилась в ещё одну форму прокрастинации."}
-                      {index === 3 && "Прогресс остаётся у тебя на устройстве и помогает замечать, что реально работает."}
-                      {index === 4 && "Если день пошёл криво, приложение не наказывает, а помогает вернуться без стыда."}
+                      {index === 0 &&
+                        "Не нужно долго думать о себе. Просто честно отмечаешь, что с тобой сейчас."}
+                      {index === 1 &&
+                        "Короткое действие проще начать, чем большой план по самоконтролю."}
+                      {index === 2 &&
+                        "Таймер держит рамку, чтобы пауза не превратилась в ещё одну форму прокрастинации."}
+                      {index === 3 &&
+                        "Прогресс остаётся у тебя на устройстве и помогает замечать, что реально работает."}
+                      {index === 4 &&
+                        "Если день пошёл криво, приложение не наказывает, а помогает вернуться без стыда."}
                     </p>
                   </div>
                 </div>
@@ -383,7 +448,10 @@ export function LandingPage() {
 
           <div className="flex flex-wrap gap-3">
             {audience.map((item) => (
-              <div key={item} className="rounded-full border border-[rgba(120,83,66,0.08)] bg-white/80 px-4 py-3 text-sm font-medium text-[var(--ink)] shadow-[0_12px_28px_rgba(88,62,53,0.05)]">
+              <div
+                key={item}
+                className="rounded-full border border-[rgba(120,83,66,0.08)] bg-white/80 px-4 py-3 text-sm font-medium text-[var(--ink)] shadow-[0_12px_28px_rgba(88,62,53,0.05)]"
+              >
                 {item}
               </div>
             ))}
@@ -436,8 +504,12 @@ export function LandingPage() {
                 Откроется само приложение: без регистрации, без оплаты, без лишнего шума.
               </p>
               <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                <Link className={linkButtonClassName("primary")} href="/app">Попробовать бесплатно</Link>
-                <Link className={linkButtonClassName("secondary")} href="#problem">Сначала понять проблему</Link>
+                <Link className={linkButtonClassName("primary")} href="/app">
+                  Попробовать бесплатно
+                </Link>
+                <Link className={linkButtonClassName("secondary")} href="#problem">
+                  Сначала понять проблему
+                </Link>
               </div>
             </div>
           </Card>
