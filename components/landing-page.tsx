@@ -256,14 +256,7 @@ export function LandingPage() {
                   to={{ opacity: 1, y: 0 }}
                 />
                 <p className="mt-2 text-[0.98rem] leading-7 text-[var(--ink-soft)] sm:text-[1.08rem]">
-                  <ShinyText
-                    color="#7a6056"
-                    delay={0.2}
-                    shineColor="#fffdfb"
-                    speed={5.2}
-                    spread={115}
-                    text="Спокойная пауза перед быстрым дофамином"
-                  />
+                  Спокойная пауза перед быстрым дофамином
                 </p>
               </div>
               <Link
