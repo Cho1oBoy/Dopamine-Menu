@@ -1,6 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { afterEach } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import Home from "../app/page";
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 test("renders the home screen title, primary action, and progress card", () => {
   render(<Home />);
@@ -59,4 +64,55 @@ test("offers adding a note after completing a session", () => {
   fireEvent.click(screen.getByRole("button", { name: "Я сделал" }));
 
   expect(screen.getByRole("button", { name: "Добавить заметку" })).toBeInTheDocument();
+});
+
+test("restores an active timer session after reload", () => {
+  localStorage.setItem(
+    "dopamine-menu-ui-state",
+    JSON.stringify({
+      step: "timer",
+      selectedStateId: "scroll",
+      selectedSuggestionId: "scroll-breath",
+      recentSessionId: null,
+      journalSessionId: null,
+      remainingSec: 90,
+      timerMode: "suggestion",
+      timerEndsAt: null
+    })
+  );
+
+  render(<Home />);
+
+  expect(screen.getByText("1:30")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Я сделал" })).toBeInTheDocument();
+});
+
+test("reacts to browser back navigation", async () => {
+  render(<Home />);
+
+  fireEvent.click(screen.getByRole("button", { name: "Меня тянет залипнуть" }));
+  expect(screen.getByText("Что сейчас ближе всего?")).toBeInTheDocument();
+
+  await act(async () => {
+    window.dispatchEvent(
+      new PopStateEvent("popstate", {
+        state: {
+          dopamineMenuUi: {
+            step: "home",
+            selectedStateId: null,
+            selectedSuggestionId: null,
+            recentSessionId: null,
+            journalSessionId: null,
+            remainingSec: 0,
+            timerMode: "suggestion",
+            timerEndsAt: null
+          }
+        }
+      })
+    );
+  });
+
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: "Меня тянет залипнуть" })).toBeInTheDocument();
+  });
 });
