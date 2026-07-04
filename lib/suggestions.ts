@@ -5,6 +5,10 @@ export function getSuggestionsForState(stateId: string): Suggestion[] {
   return SUGGESTIONS.filter((item) => item.stateId === stateId);
 }
 
+export function getSuggestionById(suggestionId: string): Suggestion | null {
+  return SUGGESTIONS.find((item) => item.id === suggestionId) ?? null;
+}
+
 export function pickSuggestion(stateId: string, currentSuggestionId?: string): Suggestion | null {
   const items = getSuggestionsForState(stateId);
 
