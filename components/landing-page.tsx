@@ -259,12 +259,20 @@ export function LandingPage() {
                   Спокойная пауза перед быстрым дофамином
                 </p>
               </div>
-              <Link
-                className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)] sm:hidden"
-                href="/app"
-              >
-                Открыть
-              </Link>
+              <div className="flex items-center gap-2 sm:hidden">
+                <Link
+                  className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full px-3 text-sm font-semibold text-[var(--ink-soft)] transition hover:text-[var(--ink)]"
+                  href="/challenge"
+                >
+                  7-дневный челлендж
+                </Link>
+                <Link
+                  className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)]"
+                  href="/app"
+                >
+                  Открыть
+                </Link>
+              </div>
             </div>
 
             <nav className="hidden items-center gap-2 sm:flex">
@@ -277,6 +285,12 @@ export function LandingPage() {
                   {item.label}
                 </Link>
               ))}
+              <Link
+                className="rounded-full px-4 py-2 text-sm font-semibold text-[var(--accent-strong)] transition hover:bg-white/78"
+                href="/challenge"
+              >
+                7-дневный челлендж
+              </Link>
               <Link className={linkButtonClassName("primary")} href="/app">
                 Попробовать
               </Link>

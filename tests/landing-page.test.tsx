@@ -17,6 +17,10 @@ describe("LandingPage", () => {
       screen.getAllByRole("link", { name: "Попробовать бесплатно" }).length
     ).toBeGreaterThan(0);
 
+    const challengeLinks = screen.getAllByRole("link", { name: "7-дневный челлендж" });
+    expect(challengeLinks.length).toBeGreaterThan(0);
+    challengeLinks.forEach((link) => expect(link).toHaveAttribute("href", "/challenge"));
+
     expect(screen.getByText("Приложение не запрещает. Оно помогает переключиться.")).toBeInTheDocument();
   });
 

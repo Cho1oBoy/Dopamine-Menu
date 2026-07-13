@@ -1,4 +1,4 @@
-const CACHE_NAME = "dopamine-menu-v1";
+const CACHE_NAME = "dopamine-menu-v2";
 const PRECACHE_URLS = [
   "/",
   "/manifest.webmanifest",
@@ -38,8 +38,24 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const cloned = response.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, cloned)));
+          }
+
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
+    );
+    return;
+  }
+
   if (PRECACHE_URLS.includes(url.pathname)) {
-    event.respondWith(caches.match(request).then((response) => response || fetch(request)));
+    event.respondWith(fetch(request).catch(() => caches.match(request)));
     return;
   }
 
