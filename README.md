@@ -55,6 +55,22 @@ The app does not use a backend. User data is stored in browser `localStorage`.
 
 This keeps the Next.js production build SSR-safe.
 
+## Яндекс Метрика / Yandex Metrica
+
+Create a Yandex Metrica tag and add its numeric ID locally:
+
+```bash
+copy .env.example .env.local
+```
+
+Then set:
+
+```env
+NEXT_PUBLIC_YANDEX_METRICA_ID=12345678
+```
+
+On Vercel, add the same variable under **Project Settings → Environment Variables** for the Production environment. The integration sends SPA page views with `hit` and the allowlisted product events from `lib/analytics.ts` with `reachGoal`. Session Replay is disabled and journal text is never included.
+
 ## Структура проекта / Project Structure
 
 - `app/` - Next.js App Router entry files and manifest

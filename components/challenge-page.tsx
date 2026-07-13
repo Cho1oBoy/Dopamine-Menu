@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { PageViewTracker } from "./analytics/page-view-tracker";
+import { TrackedLink } from "./analytics/tracked-link";
 import { Card } from "./ui/card";
 
 const TELEGRAM_URL = "https://t.me/your_username";
@@ -35,22 +37,36 @@ const challengeDays = [
 const primaryButtonClassName =
   "inline-flex min-h-[3.75rem] items-center justify-center rounded-[1.4rem] bg-[linear-gradient(180deg,var(--accent),var(--accent-strong))] px-6 py-4 text-center text-base font-semibold tracking-[-0.01em] text-[var(--accent-ink)] shadow-[0_18px_44px_rgba(214,116,90,0.28)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_54px_rgba(214,116,90,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]";
 
-function TelegramLink({ children }: { children: string }) {
+function TelegramLink({
+  children,
+  placement
+}: {
+  children: string;
+  placement: "hero" | "footer";
+}) {
   return (
-    <a
+    <TrackedLink
+      analyticsEvents={[
+        { name: "challenge_cta_clicked", properties: { placement } },
+        {
+          name: "telegram_clicked",
+          properties: { source: placement === "hero" ? "challenge_hero" : "challenge_footer" }
+        }
+      ]}
       className={primaryButtonClassName}
       href={TELEGRAM_URL}
       rel="noreferrer"
       target="_blank"
     >
       {children}
-    </a>
+    </TrackedLink>
   );
 }
 
 export function ChallengePage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
+      <PageViewTracker name="challenge_page_viewed" />
       <div className="space-y-6 sm:space-y-8">
         <header className="flex items-center justify-between gap-4 rounded-[2rem] border border-[rgba(120,83,66,0.08)] bg-white/68 px-4 py-4 shadow-[0_16px_40px_rgba(88,62,53,0.05)] backdrop-blur sm:px-5">
           <Link
@@ -59,12 +75,15 @@ export function ChallengePage() {
           >
             Dopamine Menu
           </Link>
-          <Link
+          <TrackedLink
+            analyticsEvents={[
+              { name: "app_start_clicked", properties: { source: "challenge_header" } }
+            ]}
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-white/86 px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             href="/app"
           >
             Открыть приложение
-          </Link>
+          </TrackedLink>
         </header>
 
         <section className="grid gap-4 lg:grid-cols-[1.12fr_0.88fr] lg:gap-6">
@@ -86,7 +105,7 @@ export function ChallengePage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <TelegramLink>Хочу участвовать</TelegramLink>
+                <TelegramLink placement="hero">Хочу участвовать</TelegramLink>
                 <p className="max-w-xs text-sm leading-6 text-[var(--ink-soft)]">
                   Откроется Telegram. Оплату пока не принимаем — собираем первую группу.
                 </p>
@@ -244,7 +263,7 @@ export function ChallengePage() {
                 Без соревнования за идеальный результат. С заданиями, поддержкой и правом спокойно начать заново.
               </p>
               <div className="flex justify-center pt-1">
-                <TelegramLink>Вступить в первую группу</TelegramLink>
+                <TelegramLink placement="footer">Вступить в первую группу</TelegramLink>
               </div>
             </div>
           </Card>

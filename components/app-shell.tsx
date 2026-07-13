@@ -2,6 +2,7 @@
 
 import { startTransition, useEffect, useRef, useState } from "react";
 
+import { trackEvent } from "../lib/analytics";
 import { MOOD_STATES } from "../lib/content";
 import { getSuggestionById, pickSuggestion } from "../lib/suggestions";
 import {
@@ -178,7 +179,8 @@ export function AppShell() {
     syncUiState(buildUiState(), "replace");
   }, [journalSessionId, recentSessionId, selectedState, selectedSuggestion, step, timerEndsAt, timerMode]);
 
-  function openRelapseMode() {
+  function openRelapseMode(source: "home" | "result") {
+    trackEvent("slip_mode_opened", { source });
     moveTo("relapse");
   }
 
@@ -203,6 +205,14 @@ export function AppShell() {
       return;
     }
 
+    trackEvent("state_selected", { stateId: state.id });
+    trackEvent("action_recommended", {
+      stateId: state.id,
+      actionId: suggestion.id,
+      actionType: suggestion.type,
+      durationMinutes: suggestion.durationMinutes
+    });
+
     moveTo("suggestion", {
       selectedStateId: state.id,
       selectedSuggestionId: suggestion.id,
@@ -223,6 +233,12 @@ export function AppShell() {
       return;
     }
 
+    trackEvent("action_recommended", {
+      stateId: selectedState.id,
+      actionId: nextSuggestion.id,
+      actionType: nextSuggestion.type,
+      durationMinutes: nextSuggestion.durationMinutes
+    });
     setSelectedSuggestion(nextSuggestion);
   }
 
@@ -233,6 +249,13 @@ export function AppShell() {
 
     const nextRemainingSec = selectedSuggestion.durationMinutes * 60;
     const endsAt = new Date(Date.now() + nextRemainingSec * 1000).toISOString();
+
+    trackEvent("timer_started", {
+      mode: "suggestion",
+      durationSeconds: nextRemainingSec,
+      stateId: selectedSuggestion.stateId,
+      actionId: selectedSuggestion.id
+    });
 
     setTimerMode("suggestion");
     setTimerEndsAt(endsAt);
@@ -249,6 +272,7 @@ export function AppShell() {
     setRemainingSec(0);
 
     if (timerMode === "relapse") {
+      trackEvent("session_completed", { mode: "slip", durationSeconds: 120 });
       moveTo("home", { remainingSec: 0, timerEndsAt: null });
       return;
     }
@@ -256,6 +280,13 @@ export function AppShell() {
     if (!selectedState || !selectedSuggestion) {
       return;
     }
+
+    trackEvent("session_completed", {
+      mode: "suggestion",
+      durationSeconds: selectedSuggestion.durationMinutes * 60,
+      stateId: selectedState.id,
+      actionId: selectedSuggestion.id
+    });
 
     const nextData = recordCompletedSession(data, {
       stateId: selectedState.id,
@@ -314,6 +345,7 @@ export function AppShell() {
     const endsAt = new Date(Date.now() + nextRemainingSec * 1000).toISOString();
 
     handleRelapseRestart();
+    trackEvent("timer_started", { mode: "slip", durationSeconds: nextRemainingSec });
     setTimerMode("relapse");
     setTimerEndsAt(endsAt);
     setRemainingSec(nextRemainingSec);
@@ -330,6 +362,7 @@ export function AppShell() {
     onePercentBetter: string;
   }) {
     handleRelapseRestart(entry);
+    trackEvent("journal_entry_created", { kind: "slip" });
     moveTo("state");
   }
 
@@ -362,6 +395,13 @@ export function AppShell() {
       moodAfter: entry.moodAfter,
       notes: entry.notes,
       nowIso: new Date().toISOString()
+    });
+
+    trackEvent("journal_entry_created", {
+      kind: "session",
+      stateId: session.stateId,
+      moodBefore: entry.moodBefore,
+      moodAfter: entry.moodAfter
     });
 
     setData(nextData);
@@ -424,7 +464,7 @@ export function AppShell() {
           }}
           onHelpful={() => finishResult(true)}
           onNotHelpful={() => finishResult(false)}
-          onRelapse={openRelapseMode}
+          onRelapse={() => openRelapseMode("result")}
         />
       );
     }
@@ -461,9 +501,12 @@ export function AppShell() {
     return (
       <HomeScreen
         helpedSessions={data.stats.helpedSessions}
-        onOpenFlow={() => moveTo("state")}
+        onOpenFlow={() => {
+          trackEvent("app_start_clicked", { source: "app_home" });
+          moveTo("state");
+        }}
         onOpenJournal={openJournal}
-        onOpenRelapse={openRelapseMode}
+        onOpenRelapse={() => openRelapseMode("home")}
         onOpenStats={() => moveTo("stats")}
         streak={data.stats.streak}
       />

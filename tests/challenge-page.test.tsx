@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 
 import ChallengePage from "../app/challenge/page";
+import { ANALYTICS_BROWSER_EVENT, type AnalyticsEvent } from "../lib/analytics";
 
 describe("ChallengePage", () => {
   test("explains the seven-day challenge without medical promises", () => {
@@ -31,5 +32,34 @@ describe("ChallengePage", () => {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noreferrer");
     });
+  });
+
+  test("tracks the challenge view and Telegram CTA without personal data", async () => {
+    const events: AnalyticsEvent[] = [];
+    const listener = (event: Event) => events.push((event as CustomEvent<AnalyticsEvent>).detail);
+    window.addEventListener(ANALYTICS_BROWSER_EVENT, listener);
+
+    render(<ChallengePage />);
+
+    await waitFor(() => {
+      expect(events.some((event) => event.name === "challenge_page_viewed")).toBe(true);
+    });
+
+    fireEvent.click(screen.getByRole("link", { name: "Хочу участвовать" }));
+
+    expect(events).toContainEqual(
+      expect.objectContaining({
+        name: "challenge_cta_clicked",
+        properties: { placement: "hero" }
+      })
+    );
+    expect(events).toContainEqual(
+      expect.objectContaining({
+        name: "telegram_clicked",
+        properties: { source: "challenge_hero" }
+      })
+    );
+
+    window.removeEventListener(ANALYTICS_BROWSER_EVENT, listener);
   });
 });

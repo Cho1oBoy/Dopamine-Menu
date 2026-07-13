@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { PwaProvider } from "../components/pwa-provider";
+import { YandexMetrica } from "../components/analytics/yandex-metrica";
 
 export const metadata: Metadata = {
   title: "Dopamine Menu",
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ru">
       <body className="min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased">
         <PwaProvider />
+        <YandexMetrica counterId={process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ?? ""} />
         {children}
       </body>
     </html>

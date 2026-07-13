@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { PageViewTracker } from "./analytics/page-view-tracker";
+import { TrackedLink } from "./analytics/tracked-link";
 import BlurText from "./blur-text";
 import ShinyText from "./shiny-text";
 import SplitText from "./split-text";
@@ -238,6 +240,7 @@ function linkButtonClassName(variant: "primary" | "secondary") {
 export function LandingPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
+      <PageViewTracker name="landing_view" />
       <div className="space-y-6 sm:space-y-8">
         <header className="rounded-[2rem] border border-[rgba(120,83,66,0.08)] bg-white/68 px-4 py-4 shadow-[0_16px_40px_rgba(88,62,53,0.05)] backdrop-blur sm:px-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -266,12 +269,15 @@ export function LandingPage() {
                 >
                   7-дневный челлендж
                 </Link>
-                <Link
+                <TrackedLink
+                  analyticsEvents={[
+                    { name: "app_start_clicked", properties: { source: "landing_header" } }
+                  ]}
                   className="inline-flex min-h-[2.8rem] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--ink)] ring-1 ring-[rgba(120,83,66,0.10)]"
                   href="/app"
                 >
                   Открыть
-                </Link>
+                </TrackedLink>
               </div>
             </div>
 
@@ -291,9 +297,15 @@ export function LandingPage() {
               >
                 7-дневный челлендж
               </Link>
-              <Link className={linkButtonClassName("primary")} href="/app">
+              <TrackedLink
+                analyticsEvents={[
+                  { name: "app_start_clicked", properties: { source: "landing_header" } }
+                ]}
+                className={linkButtonClassName("primary")}
+                href="/app"
+              >
                 Попробовать
-              </Link>
+              </TrackedLink>
             </nav>
           </div>
         </header>
@@ -318,24 +330,7 @@ export function LandingPage() {
                     text="Когда тянет залипнуть — выбери здоровый дофамин"
                   />
                 </h1>
-                <p className="max-w-2xl text-[1.02rem] leading-8 text-[var(--ink)]/84 sm:text-[1.25rem] sm:leading-9">
-                  Dopamine Menu помогает сделать паузу перед скроллом, сладким, фастфудом,
-                  импульсивными покупками и прокрастинацией.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link className={linkButtonClassName("primary")} href="/app">
-                  Попробовать бесплатно
-                </Link>
-                <Link className={linkButtonClassName("secondary")} href="#how-it-works">
-                  Как это работает
-                </Link>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[1.4rem] bg-white/72 px-4 py-4 ring-1 ring-[rgba(120,83,66,0.08)]">
-                  <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[var(--ink-soft)]">Пауза</p>
+                <p�M��G����ƭy�xt-[0.72rem] uppercase tracking-[0.18em] text-[var(--ink-soft)]">Пауза</p>
                   <p className="mt-2 text-2xl font-semibold tracking-[-0.06em] text-[var(--ink)]">2–5 мин</p>
                 </div>
                 <div className="rounded-[1.4rem] bg-white/72 px-4 py-4 ring-1 ring-[rgba(120,83,66,0.08)]">
@@ -575,9 +570,15 @@ export function LandingPage() {
                 Откроется само приложение: без регистрации, без оплаты, без лишнего шума.
               </p>
               <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                <Link className={linkButtonClassName("primary")} href="/app">
+                <TrackedLink
+                  analyticsEvents={[
+                    { name: "app_start_clicked", properties: { source: "landing_footer" } }
+                  ]}
+                  className={linkButtonClassName("primary")}
+                  href="/app"
+                >
                   Попробовать бесплатно
-                </Link>
+                </TrackedLink>
                 <Link className={linkButtonClassName("secondary")} href="#problem">
                   Сначала понять проблему
                 </Link>
