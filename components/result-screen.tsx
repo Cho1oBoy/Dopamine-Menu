@@ -1,3 +1,4 @@
+import { FeedbackLinks } from "./feedback-links";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 
@@ -41,6 +42,8 @@ export function ResultScreen({
           Я сорвался
         </Button>
       </Card>
+
+      <FeedbackLinks context="result" />
     </div>
   );
 }

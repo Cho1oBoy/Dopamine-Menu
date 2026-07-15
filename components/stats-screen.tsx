@@ -1,5 +1,6 @@
 import { getTopStates } from "../lib/stats";
 import type { AppData } from "../lib/types";
+import { FeedbackLinks } from "./feedback-links";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 
@@ -164,6 +165,8 @@ export function StatsScreen({ data, onBack, onOpenJournal }: StatsScreenProps) {
           </p>
         )}
       </Card>
+
+      <FeedbackLinks context="stats" />
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button onClick={onBack} variant="secondary">
