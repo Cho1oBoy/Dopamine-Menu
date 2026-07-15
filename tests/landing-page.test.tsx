@@ -22,6 +22,10 @@ describe("LandingPage", () => {
     expect(challengeLinks.length).toBeGreaterThan(0);
     challengeLinks.forEach((link) => expect(link).toHaveAttribute("href", "/challenge"));
 
+    const aboutLinks = screen.getAllByRole("link", { name: "О проекте" });
+    expect(aboutLinks.length).toBeGreaterThan(0);
+    aboutLinks.forEach((link) => expect(link).toHaveAttribute("href", "/about"));
+
     expect(screen.getByText("Приложение не запрещает. Оно помогает переключиться.")).toBeInTheDocument();
   });
 

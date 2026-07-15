@@ -297,6 +297,12 @@ export function LandingPage() {
               >
                 7-дневный челлендж
               </Link>
+              <Link
+                className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ink-soft)] transition hover:bg-white/78 hover:text-[var(--ink)]"
+                href="/about"
+              >
+                О проекте
+              </Link>
               <TrackedLink
                 analyticsEvents={[
                   { name: "app_start_clicked", properties: { source: "landing_header" } }
@@ -608,6 +614,17 @@ export function LandingPage() {
               </div>
             </div>
           </Card>
+          <footer className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 pt-6 text-sm text-[var(--ink-soft)]">
+            <Link className="transition hover:text-[var(--ink)]" href="/about">
+              О проекте
+            </Link>
+            <Link className="transition hover:text-[var(--ink)]" href="/challenge">
+              7-дневный челлендж
+            </Link>
+            <Link className="transition hover:text-[var(--ink)]" href="/app">
+              Открыть приложение
+            </Link>
+          </footer>
         </section>
       </div>
     </main>
